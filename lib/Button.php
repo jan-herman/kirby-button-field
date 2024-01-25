@@ -3,6 +3,7 @@
 namespace JanHerman\ButtonField;
 
 use Kirby\Cms\Url;
+use Kirby\Toolkit\Str;
 
 class Button
 {
@@ -40,5 +41,72 @@ class Button
         }
 
         return Url::to($this->props['link']);
+    }
+
+    // based on:
+    // https://github.com/getkirby/kirby/blob/v4/develop/panel/src/components/Forms/Field/LinkField.vue#L127
+    // and https://github.com/tobimori/kirby-spielzeug/blob/main/config/fieldMethods.php
+    public function type(): string
+    {
+        $link = $this->props['link'];
+
+        if (empty($link)) {
+            return 'custom';
+        }
+
+        if (Str::match($link, '/^(http|https):\/\//')) {
+            return 'url';
+        }
+
+        if (Str::startsWith($link, 'page://') || Str::startsWith($link, '/@/page/')) {
+            return 'page';
+        }
+
+        if (Str::startsWith($link, 'file://') || Str::startsWith($link, '/@/file/')) {
+            return 'file';
+        }
+
+        if (Str::startsWith($link, 'tel:')) {
+            return 'tel';
+        }
+
+        if (Str::startsWith($link, 'mailto:')) {
+            return 'email';
+        }
+
+        if (Str::startsWith($link, '#')) {
+            return 'anchor';
+        }
+
+        return 'custom';
+    }
+
+    public function textFallback(): string
+    {
+        $link = $this->props['link'];
+        $type = $this->type();
+
+        switch ($type) {
+            case 'url':
+                return Url::short($link);
+            case 'page':
+                $page = page($link);
+                if ($page) {
+                    return $page->title();
+                }
+                // no break
+            case 'file':
+                $file = kirby()->file($link);
+                if ($file) {
+                    return $file->filename();
+                }
+                // no break
+            case 'email':
+                return Str::replace($link, 'mailto:', '');
+            case 'tel':
+                return Str::replace($link, 'tel:', '');
+            default:
+                return $link;
+        };
     }
 }

@@ -48,7 +48,7 @@ class Button
     // and https://github.com/tobimori/kirby-spielzeug/blob/main/config/fieldMethods.php
     public function type(): string
     {
-        $link = $this->props['link'];
+        $link = $this->link();
 
         if (empty($link)) {
             return 'custom';
@@ -83,7 +83,7 @@ class Button
 
     public function textFallback(): string
     {
-        $link = $this->props['link'];
+        $link = $this->link();
         $type = $this->type();
 
         switch ($type) {

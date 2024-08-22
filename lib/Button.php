@@ -14,7 +14,7 @@ class Button
         $this->props = $props;
     }
 
-    public function __call($name)
+    public function __call($name, $arguments = [])
     {
         return $this->props[$name] ?? null;
     }

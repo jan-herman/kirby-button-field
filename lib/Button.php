@@ -14,7 +14,7 @@ class Button
         $this->props = $props;
     }
 
-    public function __call($name, $arguments = [])
+    public function __call($name)
     {
         return $this->props[$name] ?? null;
     }
@@ -41,6 +41,11 @@ class Button
         }
 
         return Url::to($this->props['link']);
+    }
+
+    public function target(): string
+    {
+        return $this->props['new_tab'] === 'true' ? '_blank' : '';
     }
 
     // based on:

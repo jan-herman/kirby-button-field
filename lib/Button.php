@@ -45,6 +45,10 @@ class Button
 
     public function target(): string
     {
+        if (empty($this->props['new_tab'])) {
+            return '';
+        }
+
         return $this->props['new_tab'] === 'true' ? '_blank' : '';
     }
 

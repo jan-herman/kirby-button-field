@@ -65,6 +65,10 @@ Kirby::plugin('jan-herman/button-field', [
                     return '';
                 }
 
+                if (is_array($value) === true && empty(array_filter($value)) === true) {
+                    return '';
+                }
+
                 return $this->form($value)->content();
             },
             'validations' => [

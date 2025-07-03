@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.3] - 2025-07-03
+### Fixed
+- Field now correctly saves empty string when all subfields are empty
+
+
 ## [1.2.0] - 2024-08-22
 ### Added
 - `target()` method
